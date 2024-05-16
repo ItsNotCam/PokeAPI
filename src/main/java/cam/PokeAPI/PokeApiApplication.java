@@ -2,15 +2,11 @@ package cam.PokeAPI;
 
 import cam.PokeAPI.jsonObjects.MoveEffectiveness;
 import cam.PokeAPI.util.Tabulate;
-import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

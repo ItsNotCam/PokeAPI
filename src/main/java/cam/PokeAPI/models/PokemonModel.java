@@ -22,31 +22,37 @@ public class PokemonModel {
     private int eggCyclesNum, eggCyclesStepsMin, eggCyclesStepsMax;
 
     enum ColumnIndex {
-        NUMBER(0),
-        NAME(1),
-        SUB_NAME(2),
-        ICON_PATH(3),
-        TOTAL(4),
-        HP(5),
-        ATTACK(6),
-        DEFENSE(7),
-        SPECIAL_ATTACK(8),
-        SPECIAL_DEFENSE(9),
-        SPEED(10),
-        SPECIES(11),
-        HEIGHT(12),
-        WEIGHT(13),
-        CATCH_RATE_NUM(14),
-        CATCH_RATE_PERCENT(15),
-        FRIENDSHIP_NUM(16),
-        FRIENDSHIP_EXTREMITY(17),
-        BASE_EXP(18),
-        GROWTH_RATE(19),
-        GENDER_MALE_PERCENT(20),
-        GENDER_FEMALE_PERCENT(21),
-        EGG_CYCLES_NUM(22),
-        EGG_CYCLES_STEPS_MIN(23),
-        EGG_CYCLES_STEPS_MAX(24);
+        NUMBER(1),
+        NAME(2),
+        SUB_NAME(3),
+
+        ICON_PATH(4),
+
+        TOTAL(5),
+        HP(6),
+        ATTACK(7),
+        DEFENSE(8),
+        SPECIAL_ATTACK(9),
+        SPECIAL_DEFENSE(10),
+        SPEED(11),
+
+        SPECIES(12),
+        HEIGHT(13),
+        WEIGHT(14),
+
+        CATCH_RATE_NUM(15),
+        CATCH_RATE_PERCENT(16),
+
+        FRIENDSHIP_NUM(17),
+        FRIENDSHIP_EXTREMITY(18),
+        BASE_EXP(19),
+
+        GROWTH_RATE(20),
+        GENDER_MALE_PERCENT(21),
+        GENDER_FEMALE_PERCENT(22),
+        EGG_CYCLES_NUM(23),
+        EGG_CYCLES_STEPS_MIN(24),
+        EGG_CYCLES_STEPS_MAX(25);
 
         private final int value;
 

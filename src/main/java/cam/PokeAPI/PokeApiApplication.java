@@ -1,32 +1,68 @@
 package cam.PokeAPI;
 
+import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.sql.*;
-import java.util.Arrays;
 
 @RestController
 @EnableAutoConfiguration
 public class PokeApiApplication {
-	static final String DB_URL = String.format(
-			"jdbc:postgresql://%s:%d/%s?user=%s&password=%s",
-			System.getenv("DB_HOST"),
-			Integer.parseInt(System.getenv("DB_PORT")),
-			System.getenv("DB_NAME"),
-			System.getenv("DB_USER"),
-			System.getenv("DB_PASS")
-	);
 	static Connection connection;
 
 	static {
 		try {
+			final String DB_URL = String.format(
+					"jdbc:postgresql://%s:%d/%s?user=%s&password=%s",
+					System.getenv("DB_HOST"),
+					Integer.parseInt(System.getenv("DB_PORT")),
+					System.getenv("DB_NAME"),
+					System.getenv("DB_USER"),
+					System.getenv("DB_PASS")
+			);
 			connection = DriverManager.getConnection(DB_URL);
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@WebFilter("/*")
+	public static class CaseInsensitiveFilter implements Filter {
+
+		@Override
+		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+			request.getParameterMap().forEach((key, value) -> {
+				String lowerCaseKey = key.toLowerCase();
+				request.setAttribute(lowerCaseKey, value);
+			});
+
+			chain.doFilter(request, response);
+		}
+
+		@Override
+		public void init(FilterConfig filterConfig) throws ServletException {
+			// Initialization code
+		}
+
+		@Override
+		public void destroy() {
+			// Cleanup code
+		}
+	}
+
+	@RequestMapping("/pokemon")
+	@ResponseBody
+	String getPokemon(
+			@RequestParam() String ok,
+			@RequestParam() String whoasked
+	) {
+		return ok.concat(whoasked);
+	}
+
 
 	@RequestMapping("/")
 	@ResponseBody

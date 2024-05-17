@@ -71,7 +71,9 @@ public class PokemonQueries {
 					STRING_AGG(DISTINCT pe.element_name::text, ',') AS elements,
 					STRING_AGG(DISTINCT pm.move_name::text, ',') AS moves,
 					STRING_AGG(DISTINCT pa.ability_name::text, ',') AS abilities,
-					STRING_AGG(DISTINCT pev.ev_name::text, ',') AS evs
+					STRING_AGG(DISTINCT pev.ev_name::text, ',') AS evs,
+					STRING_AGG(DISTINCT CONCAT(me_from.dmg_source, '-', me_from.effectiveness), ',') AS effectiveness_from,
+					STRING_AGG(DISTINCT CONCAT(me_against.dmg_dest, '-', me_against.effectiveness), ',') AS effectiveness_against
 				
 				FROM pokemon AS p
 				
@@ -94,6 +96,12 @@ public class PokemonQueries {
 					ON pev.pokemon_number = p.number
 					AND pev.pokemon_name = p.name
 					AND pev.pokemon_sub_name = ''
+				
+				INNER JOIN move_effectiveness AS me_from
+					ON me_from.dmg_dest = pe.element_name
+					
+				INNER JOIN move_effectiveness AS me_against
+					ON me_against.dmg_source = pe.element_name
 				
 				WHERE p.name = ?
 					AND p.sub_name = ''

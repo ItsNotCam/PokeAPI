@@ -1,6 +1,7 @@
 package cam.PokeAPI.db;
 
 import cam.PokeAPI.api.objects.PokemonEVObject;
+import cam.PokeAPI.api.objects.PokemonElementEffectivenessObject;
 import cam.PokeAPI.api.objects.PokemonObject;
 import cam.PokeAPI.db.models.PokemonEVModel;
 import cam.PokeAPI.db.models.PokemonModel;
@@ -8,6 +9,10 @@ import cam.PokeAPI.db.queries.EVQueries;
 import cam.PokeAPI.db.queries.PokemonQueries;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class PokemonDB {
   static Connection connection;
@@ -41,15 +46,20 @@ public class PokemonDB {
     } else {
       try {
         while(rs.next()) {
+          // Get raw values from query
           String[] elements = rs.getString("elements").split(",");
           String[] moves = rs.getString("moves").split(",");
           String[] abilities = rs.getString("abilities").split(",");
           String[] evNames = rs.getString("evs").split(",");
+          String[] effectiveness_from = rs.getString("effectiveness_from").split(",");
+          String[] effectiveness_attacking = rs.getString("effectiveness_against").split(",");
 
+          // Get reused columns
           int pokemonNumber = rs.getInt("number");
           String pokemonName = rs.getString("name");
           String pokemonSubName = rs.getString("sub_name");
 
+          // Get Pokemon
           PokemonModel model = new PokemonModel(
               pokemonNumber, pokemonName, pokemonSubName,
               rs.getString("icon_path"), rs.getInt("total"), rs.getInt("hp"),
@@ -66,9 +76,8 @@ public class PokemonDB {
           rs.close();
           st.close();
 
-          //TODO: get evs
+          // Get EVs
           PokemonEVObject[] evs = new PokemonEVObject[evNames.length];
-
           for(int i = 0; i < evNames.length; i++) {
             String evName = evNames[i];
             String evSQL = EVQueries.getEV();
@@ -87,7 +96,47 @@ public class PokemonDB {
             rs.close();
           }
 
-          return new PokemonObject(elements, moves, abilities, evs, model);
+          // Get effectiveness from
+          Map<String, Integer> effectDefendingMap = new HashMap<>();
+          for (String s : effectiveness_from) {
+            String[] curEffects = s.split("-");
+            String elementName = curEffects[0];
+            int elementValue = Integer.parseInt(curEffects[1]);
+
+            if (effectDefendingMap.containsKey(elementName)) {
+              elementValue *= effectDefendingMap.get(elementName);
+            }
+            effectDefendingMap.put(elementName, elementValue);
+          }
+
+          PokemonElementEffectivenessObject[] effectsDefending = new PokemonElementEffectivenessObject[effectDefendingMap.size()];
+          Set<String> keysFrom = effectDefendingMap.keySet();
+          for(int i = 0; i < effectDefendingMap.size(); i++) {
+            Object key = keysFrom.toArray()[i];
+            effectsDefending[i] = new PokemonElementEffectivenessObject((String)key, effectDefendingMap.get(key));
+          }
+
+          // Get effectiveness against
+          Map<String, Integer> effectAttackingMap = new HashMap<>();
+          for (String s : effectiveness_attacking) {
+            String[] curEffects = s.split("-");
+            String elementName = curEffects[0];
+            int elementValue = Integer.parseInt(curEffects[1]);
+
+            if (effectAttackingMap.containsKey(elementName)) {
+              elementValue *= effectAttackingMap.get(elementName);
+            }
+            effectAttackingMap.put(elementName, elementValue);
+          }
+
+          PokemonElementEffectivenessObject[] effectsAttacking = new PokemonElementEffectivenessObject[effectAttackingMap.size()];
+          Set<String> keysAgainst = effectAttackingMap.keySet();
+          for(int i = 0; i < effectAttackingMap.size(); i++) {
+            Object key = keysAgainst.toArray()[i];
+            effectsAttacking[i] = new PokemonElementEffectivenessObject((String)key, effectAttackingMap.get(key));
+          }
+
+          return new PokemonObject(elements, moves, abilities, evs, effectsDefending, effectsAttacking, model);
         }
       } finally {
         rs.close();

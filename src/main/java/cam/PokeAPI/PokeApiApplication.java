@@ -1,9 +1,10 @@
 package cam.PokeAPI;
 
-import cam.PokeAPI.jsonObjects.MoveEffectiveness;
-import cam.PokeAPI.models.Move;
+import cam.PokeAPI.rest.objects.Move;
+import cam.PokeAPI.rest.objects.MoveEffectiveness;
+import cam.PokeAPI.db.models.MoveModel;
 import cam.PokeAPI.util.Tabulate;
-import cam.PokeAPI.util.DB;
+import cam.PokeAPI.db.queries.PokemonQueries;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -38,33 +39,35 @@ public class PokeApiApplication {
 	}
 
 	@RequestMapping(value="/move", produces = MediaType.APPLICATION_JSON_VALUE)
-	public cam.PokeAPI.jsonObjects.Move move(
+	public Move move(
 		@RequestParam String move_name
 	){
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
 
-			String moveDataSQL = DB.getMoveData();
+			String moveDataSQL = PokemonQueries.getMoveData();
 			st = connection.prepareStatement(moveDataSQL, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			st.setString(1, move_name);
 			rs = st.executeQuery();
-			Move model = new Move(rs);
+			MoveModel model = new MoveModel(rs);
 
 			st.close();
 			rs.close();
 
-			String effectivenessSQL = DB.getEffectiveness();
+			String effectivenessSQL = PokemonQueries.getEffectiveness();
 			st = connection.prepareStatement(effectivenessSQL, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			st.setString(1, model.getElement_name());
 			rs = st.executeQuery();
 
-			return new cam.PokeAPI.jsonObjects.Move(model, rs);
+			return new Move(model, rs);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 			for (StackTraceElement s : e.getStackTrace()) {
 				System.out.println(s.toString());
 			}
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
 		} finally {
 			try {
 				if(st != null) st.close();
@@ -77,15 +80,16 @@ public class PokeApiApplication {
 
 		return null;
 	}
+
 	@RequestMapping(value="/effectiveness", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<MoveEffectiveness> home(
+	public List<MoveEffectiveness> effectiveness(
 		@RequestParam String attacker,
 		@RequestParam String defender
 	) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			String sql = DB.getMoveEffectivenessSQL();
+			String sql = PokemonQueries.getMoveEffectivenessSQL();
 			st = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			{
 				st.setString(1, defender);

@@ -1,25 +1,27 @@
-package cam.PokeAPI.models;
+package cam.PokeAPI.db.models;
 import java.sql.*;
+
+import static cam.PokeAPI.util.Util.instantiateGenerically;
 
 
 public class PokemonModel {
-    private int number;
+    private Integer number;
     private String name, subName;
 
     private String iconPath;
-    private int total, hp, attack, defense, specialAttack, specialDefense, speed;
+    private Integer total, hp, attack, defense, specialAttack, specialDefense, speed;
 
     private String species;
-    private float height, weight;
+    private Float height, weight;
 
-    private int catchRateNum;
-    private float catchRatePercent;
+    private Integer catchRateNum;
+    private Float catchRatePercent;
 
-    private int friendshipNum, baseExp;
+    private Integer friendshipNum, baseExp;
     private String friendshipExtremity, growthRate;
 
-    private float genderMalePercent, genderFemalePercent;
-    private int eggCyclesNum, eggCyclesStepsMin, eggCyclesStepsMax;
+    private Float genderMalePercent, genderFemalePercent;
+    private Integer eggCyclesNum, eggCyclesStepsMin, eggCyclesStepsMax;
 
     enum ColumnIndex {
         NUMBER(1),
@@ -65,38 +67,40 @@ public class PokemonModel {
         }
     }
 
-    public PokemonModel(ResultSet rs) throws SQLException {
-        this.number = rs.getInt(ColumnIndex.NUMBER.getValue());
-        this.name = rs.getString(ColumnIndex.NAME.getValue());
-        this.subName = rs.getString(ColumnIndex.SUB_NAME.getValue());
-
-        this.iconPath = rs.getString(ColumnIndex.ICON_PATH.getValue());
-        this.total = rs.getInt(ColumnIndex.TOTAL.getValue());
-        this.hp = rs.getInt(ColumnIndex.HP.getValue());
-        this.attack = rs.getInt(ColumnIndex.ATTACK.getValue());
-        this.defense = rs.getInt(ColumnIndex.DEFENSE.getValue());
-        this.specialAttack = rs.getInt(ColumnIndex.SPECIAL_ATTACK.getValue());
-        this.specialDefense = rs.getInt(ColumnIndex.SPECIAL_DEFENSE.getValue());
-        this.speed = rs.getInt(ColumnIndex.SPEED.getValue());
-
-        this.species = rs.getString(ColumnIndex.SPECIES.getValue());
-        this.height = rs.getFloat(ColumnIndex.HEIGHT.getValue());
-        this.weight = rs.getFloat(ColumnIndex.WEIGHT.getValue());
-
-        this.catchRateNum = rs.getInt(ColumnIndex.CATCH_RATE_NUM.getValue());
-        this.catchRatePercent = rs.getFloat(ColumnIndex.CATCH_RATE_PERCENT.getValue());
-
-        this.friendshipNum = rs.getInt(ColumnIndex.FRIENDSHIP_NUM.getValue());
-        this.friendshipExtremity = rs.getString(ColumnIndex.FRIENDSHIP_EXTREMITY.getValue());
-        this.baseExp = rs.getInt(ColumnIndex.BASE_EXP.getValue());
-        this.growthRate = rs.getString(ColumnIndex.GROWTH_RATE.getValue());
-
-        this.genderMalePercent = rs.getFloat(ColumnIndex.GENDER_MALE_PERCENT.getValue());
-        this.genderFemalePercent = rs.getFloat(ColumnIndex.GENDER_FEMALE_PERCENT.getValue());
-
-        this.eggCyclesNum = rs.getInt(ColumnIndex.EGG_CYCLES_NUM.getValue());
-        this.eggCyclesStepsMin = rs.getInt(ColumnIndex.EGG_CYCLES_STEPS_MIN.getValue());
-        this.eggCyclesStepsMax = rs.getInt(ColumnIndex.EGG_CYCLES_STEPS_MAX.getValue());
+    public PokemonModel(ResultSet rs) throws SQLException, IllegalAccessException {
+        instantiateGenerically(this, rs);
+        return;
+//        this.number = rs.getInt(ColumnIndex.NUMBER.getValue());
+//        this.name = rs.getString(ColumnIndex.NAME.getValue());
+//        this.subName = rs.getString(ColumnIndex.SUB_NAME.getValue());
+//
+//        this.iconPath = rs.getString(ColumnIndex.ICON_PATH.getValue());
+//        this.total = rs.getInt(ColumnIndex.TOTAL.getValue());
+//        this.hp = rs.getInt(ColumnIndex.HP.getValue());
+//        this.attack = rs.getInt(ColumnIndex.ATTACK.getValue());
+//        this.defense = rs.getInt(ColumnIndex.DEFENSE.getValue());
+//        this.specialAttack = rs.getInt(ColumnIndex.SPECIAL_ATTACK.getValue());
+//        this.specialDefense = rs.getInt(ColumnIndex.SPECIAL_DEFENSE.getValue());
+//        this.speed = rs.getInt(ColumnIndex.SPEED.getValue());
+//
+//        this.species = rs.getString(ColumnIndex.SPECIES.getValue());
+//        this.height = rs.getFloat(ColumnIndex.HEIGHT.getValue());
+//        this.weight = rs.getFloat(ColumnIndex.WEIGHT.getValue());
+//
+//        this.catchRateNum = rs.getInt(ColumnIndex.CATCH_RATE_NUM.getValue());
+//        this.catchRatePercent = rs.getFloat(ColumnIndex.CATCH_RATE_PERCENT.getValue());
+//
+//        this.friendshipNum = rs.getInt(ColumnIndex.FRIENDSHIP_NUM.getValue());
+//        this.friendshipExtremity = rs.getString(ColumnIndex.FRIENDSHIP_EXTREMITY.getValue());
+//        this.baseExp = rs.getInt(ColumnIndex.BASE_EXP.getValue());
+//        this.growthRate = rs.getString(ColumnIndex.GROWTH_RATE.getValue());
+//
+//        this.genderMalePercent = rs.getFloat(ColumnIndex.GENDER_MALE_PERCENT.getValue());
+//        this.genderFemalePercent = rs.getFloat(ColumnIndex.GENDER_FEMALE_PERCENT.getValue());
+//
+//        this.eggCyclesNum = rs.getInt(ColumnIndex.EGG_CYCLES_NUM.getValue());
+//        this.eggCyclesStepsMin = rs.getInt(ColumnIndex.EGG_CYCLES_STEPS_MIN.getValue());
+//        this.eggCyclesStepsMax = rs.getInt(ColumnIndex.EGG_CYCLES_STEPS_MAX.getValue());
     }
 
     public PokemonModel(int number, String name, String subName, String iconPath, int total, int hp, int attack,

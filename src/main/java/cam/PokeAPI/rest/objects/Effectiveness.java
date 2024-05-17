@@ -1,4 +1,4 @@
-package cam.PokeAPI.jsonObjects;
+package cam.PokeAPI.rest.objects;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

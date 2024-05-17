@@ -1,9 +1,11 @@
-package cam.PokeAPI.models;
+package cam.PokeAPI.db.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Move {
+import static cam.PokeAPI.util.Util.instantiateGenerically;
+
+public class MoveModel {
   String name;
   String element_name;
   String dmg_category;
@@ -13,8 +15,8 @@ public class Move {
   String description;
   Integer probability;
 
-  public Move(String name, String element_name, String dmg_category, Integer power, Integer accuracy,
-              Integer pp, String description, Integer probability)
+  public MoveModel(String name, String element_name, String dmg_category, Integer power, Integer accuracy,
+                   Integer pp, String description, Integer probability)
   {
     this.name = name;
     this.element_name = element_name;
@@ -26,17 +28,14 @@ public class Move {
     this.probability = probability;
   }
 
-  public Move(ResultSet rs) throws SQLException  {
-    while(rs.next()) {
-      this.name = rs.getString(1);
-      this.element_name = rs.getString(2);
-      this.dmg_category = rs.getString(3);
-      this.power = rs.getInt(4);
-      this.accuracy = rs.getInt(5);
-      this.pp = rs.getInt(6);
-      this.description = rs.getString(7);
-      this.probability = rs.getInt(8);
-    }
+  public MoveModel(ResultSet rs) throws SQLException, IllegalAccessException {
+    instantiateGenerically(this, rs);
+  }
+
+  @Override
+  public String toString() {
+    return name + " " + element_name + " " + dmg_category + " " + power + " " + accuracy
+      + " " + pp + " " + description + " " + probability;
   }
 
   public String getName() {

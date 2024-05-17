@@ -1,8 +1,8 @@
-package cam.PokeAPI.util;
+package cam.PokeAPI.db.queries;
 
 import org.intellij.lang.annotations.Language;
 
-public class DB {
+public class PokemonQueries {
 	public static String getMoveEffectivenessSQL() {
     @Language("PSQL")
     String sql = """

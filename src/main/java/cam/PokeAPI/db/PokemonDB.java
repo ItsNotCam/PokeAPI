@@ -1,17 +1,13 @@
 package cam.PokeAPI.db;
 
-import cam.PokeAPI.api.objects.Move;
 import cam.PokeAPI.api.objects.PokemonEVObject;
 import cam.PokeAPI.api.objects.PokemonObject;
-import cam.PokeAPI.db.models.MoveModel;
 import cam.PokeAPI.db.models.PokemonEVModel;
 import cam.PokeAPI.db.models.PokemonModel;
 import cam.PokeAPI.db.queries.EVQueries;
 import cam.PokeAPI.db.queries.PokemonQueries;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PokemonDB {
   static Connection connection;

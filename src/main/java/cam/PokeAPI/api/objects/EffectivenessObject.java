@@ -5,13 +5,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Effectiveness {
+public class EffectivenessObject {
   List<String> super_effectiveness;
   List<String> normal_effectiveness;
   List<String> minimal_effectiveness;
   List<String> no_effectiveness;
 
-  public Effectiveness(ResultSet rs) throws SQLException {
+  public EffectivenessObject(ResultSet rs) throws SQLException {
     this.super_effectiveness = new ArrayList<>();
     this.normal_effectiveness = new ArrayList<>();
     this.minimal_effectiveness = new ArrayList<>();

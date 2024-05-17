@@ -1,6 +1,6 @@
 package cam.PokeAPI.db.models;
 
-public class MessageModel implements Model {
+public class MessageModel {
   String message;
 
   public MessageModel(String message) {

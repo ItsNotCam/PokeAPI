@@ -5,8 +5,6 @@ import cam.PokeAPI.services.PokemonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import cam.PokeAPI.db.models.Model;
-
 @RestController
 @RequestMapping("/api/pokemon")
 public class PokemonController {

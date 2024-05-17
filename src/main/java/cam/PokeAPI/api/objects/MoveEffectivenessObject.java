@@ -1,13 +1,13 @@
 package cam.PokeAPI.api.objects;
 
-public class MoveEffectiveness {
+public class MoveEffectivenessObject {
   String name;
   String damage_source;
   String defender;
   String[] defender_elements;
   String effectiveness;
 
-  public MoveEffectiveness(String[] data) {
+  public MoveEffectivenessObject(String[] data) {
     this.name = data[0];
     this.damage_source = data[1];
     this.defender = data[2];
@@ -15,7 +15,7 @@ public class MoveEffectiveness {
     this.effectiveness = data[4];
   }
 
-  public MoveEffectiveness(String name, String damage_source, String defender, String defender_elements, String effectiveness) {
+  public MoveEffectivenessObject(String name, String damage_source, String defender, String defender_elements, String effectiveness) {
     this.name = name;
     this.damage_source = damage_source;
     this.defender = defender;

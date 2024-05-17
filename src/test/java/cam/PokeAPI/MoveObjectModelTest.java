@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 
-public class MoveModelTest {
+public class MoveObjectModelTest {
   @Test
   public void MoveTest() {
     final String DB_URL = "jdbc:postgresql://localhost:5432/pokemon?user=cam&password=ok";

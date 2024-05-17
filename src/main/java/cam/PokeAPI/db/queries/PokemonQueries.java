@@ -13,12 +13,12 @@ public class PokemonQueries {
 					defender.sub_name AS defender_sub_name,
 					STRING_AGG(DISTINCT defender_element.element_name::text, ',') AS defender_elements,
 					CASE
-						WHEN me.effectiveness = 0 THEN 'no effectiveness'
-						WHEN me.effectiveness = 0.5 THEN 'not very effective'
-						WHEN me.effectiveness = 1 THEN 'normal'
-						WHEN me.effectiveness = 2 THEN 'super-effective'
+						WHEN me.effectivenessObject = 0 THEN 'no effectivenessObject'
+						WHEN me.effectivenessObject = 0.5 THEN 'not very effective'
+						WHEN me.effectivenessObject = 1 THEN 'normal'
+						WHEN me.effectivenessObject = 2 THEN 'super-effective'
 					END AS friendly_effectiveness,
-					STRING_AGG(DISTINCT me.effectiveness::text, ',') AS effectiveness
+					STRING_AGG(DISTINCT me.effectivenessObject::text, ',') AS effectivenessObject
 				FROM pokemon_move AS pm
 				INNER JOIN pokemon AS defender
 					ON defender.name = ?
@@ -44,7 +44,7 @@ public class PokemonQueries {
 					defender.sub_name,
 					m.name,
 					me.dmg_source
-				ORDER BY effectiveness DESC;
+				ORDER BY effectivenessObject DESC;
 			""";
 
 		return sql;

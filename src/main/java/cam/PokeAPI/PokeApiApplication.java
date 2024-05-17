@@ -1,20 +1,7 @@
 package cam.PokeAPI;
 
-import cam.PokeAPI.api.objects.Move;
-import cam.PokeAPI.api.objects.MoveEffectiveness;
-import cam.PokeAPI.db.models.MoveModel;
-import cam.PokeAPI.util.Tabulate;
-import cam.PokeAPI.db.queries.PokemonQueries;
-
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 public class PokeApiApplication {

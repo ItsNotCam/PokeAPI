@@ -1,7 +1,7 @@
 package cam.PokeAPI;
 
-import cam.PokeAPI.rest.objects.Move;
-import cam.PokeAPI.rest.objects.MoveEffectiveness;
+import cam.PokeAPI.api.objects.Move;
+import cam.PokeAPI.api.objects.MoveEffectiveness;
 import cam.PokeAPI.db.models.MoveModel;
 import cam.PokeAPI.util.Tabulate;
 import cam.PokeAPI.db.queries.PokemonQueries;
@@ -39,13 +39,10 @@ public class PokeApiApplication {
 	}
 
 	@RequestMapping(value="/move", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Move move(
-		@RequestParam String move_name
-	){
+	public Move move(@RequestParam String move_name) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-
 			String moveDataSQL = PokemonQueries.getMoveData();
 			st = connection.prepareStatement(moveDataSQL, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			st.setString(1, move_name);
@@ -66,8 +63,6 @@ public class PokeApiApplication {
 			for (StackTraceElement s : e.getStackTrace()) {
 				System.out.println(s.toString());
 			}
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
 		} finally {
 			try {
 				if(st != null) st.close();

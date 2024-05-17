@@ -1,18 +1,21 @@
 package cam.PokeAPI.db.models;
 
-import java.lang.reflect.Field;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static cam.PokeAPI.util.Util.instantiateGenerically;
+import static cam.PokeAPI.util.Util.instantiateModelGenerically;
 
+
+@JsonRootName(value = "ability")
 public class AbilityModel {
   String name;
   String description;
   Integer generation;
 
-  public AbilityModel(ResultSet rs) throws SQLException, IllegalAccessException {
-    instantiateGenerically(this, rs);
+  public AbilityModel(ResultSet rs) throws SQLException {
+    instantiateModelGenerically(this, rs);
   }
 
   public AbilityModel(String name, String description, Integer generation) {

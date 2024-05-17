@@ -1,10 +1,13 @@
 package cam.PokeAPI.db.models;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static cam.PokeAPI.util.Util.instantiateGenerically;
+import static cam.PokeAPI.util.Util.instantiateModelGenerically;
 
+@JsonRootName(value = "move_haha")
 public class MoveModel {
   String name;
   String element_name;
@@ -28,8 +31,8 @@ public class MoveModel {
     this.probability = probability;
   }
 
-  public MoveModel(ResultSet rs) throws SQLException, IllegalAccessException {
-    instantiateGenerically(this, rs);
+  public MoveModel(ResultSet rs) throws SQLException {
+    instantiateModelGenerically(this, rs);
   }
 
   @Override

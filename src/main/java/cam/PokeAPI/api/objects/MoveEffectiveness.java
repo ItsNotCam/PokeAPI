@@ -1,4 +1,4 @@
-package cam.PokeAPI.rest.objects;
+package cam.PokeAPI.api.objects;
 
 public class MoveEffectiveness {
   String name;

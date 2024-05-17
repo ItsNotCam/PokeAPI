@@ -2,6 +2,7 @@ package cam.PokeAPI;
 
 import cam.PokeAPI.db.models.AbilityModel;
 import cam.PokeAPI.db.models.MoveModel;
+import cam.PokeAPI.db.models.PokemonModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -20,10 +21,10 @@ public class MoveModelTest {
       connection = DriverManager.getConnection(DB_URL);
       st = connection.createStatement();
       rs = st.executeQuery("SELECT * FROM move WHERE name='Aerial Ace'");
-      MoveModel moveModel = new MoveModel(rs);
-      Assertions.assertEquals(EXPECTED_OUTPUT, moveModel.toString());
+      PokemonModel pokemonModel = new PokemonModel(rs);
+      Assertions.assertEquals(EXPECTED_OUTPUT, pokemonModel.toString());
       return;
-    } catch (SQLException | IllegalAccessException e) {
+    } catch (SQLException e) {
       System.out.println("SQL Exception");
       System.out.println(e.getMessage());
       e.printStackTrace();

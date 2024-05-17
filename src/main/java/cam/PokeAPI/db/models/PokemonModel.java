@@ -1,27 +1,32 @@
 package cam.PokeAPI.db.models;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 import java.sql.*;
 
-import static cam.PokeAPI.util.Util.instantiateGenerically;
+import static cam.PokeAPI.util.Util.instantiateModelGenerically;
 
 
+@JsonRootName(value = "pokemon")
 public class PokemonModel {
     private Integer number;
-    private String name, subName;
+    private String name, sub_name;
 
     private String iconPath;
-    private Integer total, hp, attack, defense, specialAttack, specialDefense, speed;
+    private Integer total, hp, attack, defense, special_attack, special_defense, speed;
 
     private String species;
     private Float height, weight;
 
-    private Integer catchRateNum;
-    private Float catchRatePercent;
+    private Integer catch_rate_num;
+    private Float catch_rate_percent;
 
-    private Integer friendshipNum, baseExp;
-    private String friendshipExtremity, growthRate;
+    private Integer friendship_num;
+    private String friendship_extremity;
+    private Integer base_exp;
+    private String growth_rate;
 
-    private Float genderMalePercent, genderFemalePercent;
-    private Integer eggCyclesNum, eggCyclesStepsMin, eggCyclesStepsMax;
+    private Float gender_male_percent, gender_female_percent;
+    private Integer egg_cycles_num, egg_cycles_steps_min, egg_cycles_steps_max;
 
     enum ColumnIndex {
         NUMBER(1),
@@ -67,8 +72,8 @@ public class PokemonModel {
         }
     }
 
-    public PokemonModel(ResultSet rs) throws SQLException, IllegalAccessException {
-        instantiateGenerically(this, rs);
+    public PokemonModel(ResultSet rs) throws SQLException {
+        instantiateModelGenerically(this, rs);
         return;
 //        this.number = rs.getInt(ColumnIndex.NUMBER.getValue());
 //        this.name = rs.getString(ColumnIndex.NAME.getValue());
@@ -111,35 +116,44 @@ public class PokemonModel {
     {
         this.number = number;
         this.name = name;
-        this.subName = subName;
+        this.sub_name = subName;
 
         this.iconPath = iconPath;
         this.total = total;
         this.hp = hp;
         this.attack = attack;
         this.defense = defense;
-        this.specialAttack = specialAttack;
-        this.specialDefense = specialDefense;
+        this.special_attack = specialAttack;
+        this.special_defense = specialDefense;
         this.speed = speed;
 
         this.species = species;
         this.height = height;
         this.weight = weight;
 
-        this.catchRateNum = catchRateNum;
-        this.catchRatePercent = catchRatePercent;
+        this.catch_rate_num = catchRateNum;
+        this.catch_rate_percent = catchRatePercent;
 
-        this.friendshipNum = friendshipNum;
-        this.friendshipExtremity = friendshipExtremity;
-        this.baseExp = baseExp;
-        this.growthRate = growthRate;
+        this.friendship_num = friendshipNum;
+        this.friendship_extremity = friendshipExtremity;
+        this.base_exp = baseExp;
+        this.growth_rate = growthRate;
 
-        this.genderMalePercent = genderMalePercent;
-        this.genderFemalePercent = genderFemalePercent;
+        this.gender_male_percent = genderMalePercent;
+        this.gender_female_percent = genderFemalePercent;
 
-        this.eggCyclesNum = eggCyclesNum;
-        this.eggCyclesStepsMin = eggCyclesStepsMin;
-        this.eggCyclesStepsMax = egg_cycles_steps_max;
+        this.egg_cycles_num = eggCyclesNum;
+        this.egg_cycles_steps_min = eggCyclesStepsMin;
+        this.egg_cycles_steps_max = egg_cycles_steps_max;
+    }
+
+    @Override
+    public String toString() {
+        return number + " " + name + " " + sub_name + " " + iconPath + " " + total + " " + hp + " " + attack
+            + " " + defense + " " + special_attack + " " + special_defense + " " + speed + " " + species + " "
+            + height + " " + weight + " " + catch_rate_num + " " + catch_rate_percent + " " + friendship_num + " "
+            + friendship_extremity + " " + base_exp + " " + growth_rate + " " + gender_male_percent + " "
+            + gender_female_percent + " " + egg_cycles_num + " " + egg_cycles_steps_min + " " + egg_cycles_steps_max;
     }
 
     public int getNumber() {
@@ -159,11 +173,11 @@ public class PokemonModel {
     }
 
     public String getSubName() {
-        return subName;
+        return sub_name;
     }
 
-    public void setSubName(String subName) {
-        this.subName = subName;
+    public void setSub_name(String subName) {
+        this.sub_name = subName;
     }
 
     public String getIconPath() {
@@ -207,19 +221,19 @@ public class PokemonModel {
     }
 
     public int getSpecialAttack() {
-        return specialAttack;
+        return special_attack;
     }
 
-    public void setSpecialAttack(int specialAttack) {
-        this.specialAttack = specialAttack;
+    public void setSpecial_attack(int specialAttack) {
+        this.special_attack = specialAttack;
     }
 
     public int getSpecialDefense() {
-        return specialDefense;
+        return special_defense;
     }
 
-    public void setSpecialDefense(int specialDefense) {
-        this.specialDefense = specialDefense;
+    public void setSpecial_defense(int specialDefense) {
+        this.special_defense = specialDefense;
     }
 
     public int getSpeed() {
@@ -254,91 +268,91 @@ public class PokemonModel {
         this.weight = weight;
     }
 
-    public int getCatchRateNum() {
-        return catchRateNum;
+    public int getCatch_rate_num() {
+        return catch_rate_num;
     }
 
     public void setCatchRateNum(int catchRateNum) {
-        this.catchRateNum = catchRateNum;
+        this.catch_rate_num = catchRateNum;
     }
 
-    public float getCatchRatePercent() {
-        return catchRatePercent;
+    public float getCatch_rate_percent() {
+        return catch_rate_percent;
     }
 
     public void setCatchRatePercent(float catchRatePercent) {
-        this.catchRatePercent = catchRatePercent;
+        this.catch_rate_percent = catchRatePercent;
     }
 
-    public int getFriendshipNum() {
-        return friendshipNum;
+    public int getFriendship_num() {
+        return friendship_num;
     }
 
     public void setFriendshipNum(int friendshipNum) {
-        this.friendshipNum = friendshipNum;
+        this.friendship_num = friendshipNum;
     }
 
-    public String getFriendshipExtremity() {
-        return friendshipExtremity;
+    public String getFriendship_extremity() {
+        return friendship_extremity;
     }
 
     public void setFriendshipExtremity(String friendshipExtremity) {
-        this.friendshipExtremity = friendshipExtremity;
+        this.friendship_extremity = friendshipExtremity;
     }
 
-    public int getBaseExp() {
-        return baseExp;
+    public int getBase_exp() {
+        return base_exp;
     }
 
     public void setBaseExp(int baseExp) {
-        this.baseExp = baseExp;
+        this.base_exp = baseExp;
     }
 
     public String getGrowthRate() {
-        return growthRate;
+        return growth_rate;
     }
 
-    public void setGrowthRate(String growthRate) {
-        this.growthRate = growthRate;
+    public void setGrowthRate(String growth_rate) {
+        this.growth_rate = growth_rate;
     }
 
-    public float getGenderMalePercent() {
-        return genderMalePercent;
+    public float getGender_male_percent() {
+        return gender_male_percent;
     }
 
     public void setGenderMalePercent(float genderMalePercent) {
-        this.genderMalePercent = genderMalePercent;
+        this.gender_male_percent = genderMalePercent;
     }
 
-    public float getGenderFemalePercent() {
-        return genderFemalePercent;
+    public float getGender_female_percent() {
+        return gender_female_percent;
     }
 
     public void setGenderFemalePercent(float genderFemalePercent) {
-        this.genderFemalePercent = genderFemalePercent;
+        this.gender_female_percent = genderFemalePercent;
     }
 
-    public int getEggCyclesNum() {
-        return eggCyclesNum;
+    public int getEgg_cycles_num() {
+        return egg_cycles_num;
     }
 
     public void setEggCyclesNum(int eggCyclesNum) {
-        this.eggCyclesNum = eggCyclesNum;
+        this.egg_cycles_num = eggCyclesNum;
     }
 
-    public int getEggCyclesStepsMin() {
-        return eggCyclesStepsMin;
+    public int getEgg_cycles_steps_min() {
+        return egg_cycles_steps_min;
     }
 
     public void setEggCyclesStepsMin(int eggCyclesStepsMin) {
-        this.eggCyclesStepsMin = eggCyclesStepsMin;
+        this.egg_cycles_steps_min = eggCyclesStepsMin;
     }
 
-    public int getEggCyclesStepsMax() {
-        return eggCyclesStepsMax;
+    public int getEgg_cycles_steps_max() {
+        return egg_cycles_steps_max;
     }
 
     public void setEggCyclesStepsMax(int eggCyclesStepsMax) {
-        this.eggCyclesStepsMax = eggCyclesStepsMax;
+        this.egg_cycles_steps_max = eggCyclesStepsMax;
     }
 }

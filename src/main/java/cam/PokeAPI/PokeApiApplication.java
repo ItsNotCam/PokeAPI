@@ -1,7 +1,10 @@
 package cam.PokeAPI;
 
 import cam.PokeAPI.jsonObjects.MoveEffectiveness;
+import cam.PokeAPI.models.Move;
 import cam.PokeAPI.util.Tabulate;
+import cam.PokeAPI.util.DB;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
@@ -20,10 +23,8 @@ public class PokeApiApplication {
 		try {
 			final String DB_URL = String.format(
 				"jdbc:postgresql://%s:%s/%s?user=%s&password=%s",
-				env("DB_HOST"),
-				env("DB_PORT"),
-				env("DB_NAME"),
-				env("DB_USER"),
+				env("DB_HOST"), env("DB_PORT"),
+				env("DB_NAME"), env("DB_USER"),
 				env("DB_PASS")
 			);
 			connection = DriverManager.getConnection(DB_URL);
@@ -36,15 +37,46 @@ public class PokeApiApplication {
 		return System.getenv(txt);
 	}
 
-	@RequestMapping("/pokemon")
-	@ResponseBody
-	String getPokemon(
-			@RequestParam() String ok,
-			@RequestParam() String whoasked
-	) {
-		return ok.concat(whoasked);
-	}
+	@RequestMapping(value="/move", produces = MediaType.APPLICATION_JSON_VALUE)
+	public cam.PokeAPI.jsonObjects.Move move(
+		@RequestParam String move_name
+	){
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
 
+			String moveDataSQL = DB.getMoveData();
+			st = connection.prepareStatement(moveDataSQL, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			st.setString(1, move_name);
+			rs = st.executeQuery();
+			Move model = new Move(rs);
+
+			st.close();
+			rs.close();
+
+			String effectivenessSQL = DB.getEffectiveness();
+			st = connection.prepareStatement(effectivenessSQL, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			st.setString(1, model.getElement_name());
+			rs = st.executeQuery();
+
+			return new cam.PokeAPI.jsonObjects.Move(model, rs);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+			for (StackTraceElement s : e.getStackTrace()) {
+				System.out.println(s.toString());
+			}
+		} finally {
+			try {
+				if(st != null) st.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
+		return null;
+	}
 	@RequestMapping(value="/effectiveness", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<MoveEffectiveness> home(
 		@RequestParam String attacker,
@@ -53,48 +85,7 @@ public class PokeApiApplication {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			String sql = """
-					SELECT
-							DISTINCT m.name AS move_name,
-							me.dmg_source,
-							defender.name AS defender_name,
-							defender.sub_name AS defender_sub_name,
-							STRING_AGG(DISTINCT defender_element.element_name::text, ',') AS defender_elements,
-							CASE
-								WHEN me.effectiveness = 0 THEN 'no effectiveness'
-								WHEN me.effectiveness = 0.5 THEN 'not very effective'
-								WHEN me.effectiveness = 1 THEN 'normal'
-								WHEN me.effectiveness = 2 THEN 'super-effective'
-							END AS friendly_effectiveness,
-							STRING_AGG(DISTINCT me.effectiveness::text, ',') AS effectiveness
-						FROM pokemon_move AS pm
-						INNER JOIN pokemon AS defender
-							ON defender.name = ?
-							AND defender.sub_name = ''
-						INNER JOIN move AS m
-							ON m.name = pm.move_name
-						INNER JOIN move_effectiveness AS me
-							ON me.dmg_dest IN (
-								SELECT element_name
-								FROM pokemon_element
-								WHERE pokemon_name = ?
-							)
-							AND me.dmg_source = m.element_name
-						INNER JOIN pokemon_element AS defender_element
-							ON defender_element.pokemon_number = defender.number
-							AND defender_element.pokemon_name = defender.name
-							AND defender_element.pokemon_sub_name = defender.sub_name
-						WHERE pm.pokemon_name = ?
-						GROUP BY
-							pm.move_name,
-							me.dmg_dest,
-							defender.name,
-							defender.sub_name,
-							m.name,
-							me.dmg_source
-						ORDER BY effectiveness DESC;
-			""";
-
+			String sql = DB.getMoveEffectivenessSQL();
 			st = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			{
 				st.setString(1, defender);
@@ -103,10 +94,11 @@ public class PokeApiApplication {
 			}
 
 			rs = st.executeQuery();
+			int resultsLength = getLength(rs);
 
 			String[] headers = { "name", "damage source", "defender", "defender elements", "effectiveness"};
 			ArrayList<MoveEffectiveness> moves = new ArrayList<>();
-			String[][] data = new String[getLength(rs)][headers.length];
+			String[][] data = new String[resultsLength][headers.length];
 			int rowIdx = 0;
 			while(rs.next()) {
 				final String name = rs.getString(1);

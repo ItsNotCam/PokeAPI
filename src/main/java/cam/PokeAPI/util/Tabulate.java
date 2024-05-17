@@ -6,10 +6,10 @@ public class Tabulate {
     int[] longestColumnLengths = getLongestColumnLengths(headers, data);
 
     // Generate the separator
-    String separator = getSeparator(longestColumnLengths);
+    String separator = generateSeparator(longestColumnLengths);
 
     // Create the output
-    String output = separator + "\n";
+    String output = "\n";
 
     // Add the headers
     output += tabulateRow(headers, longestColumnLengths) + String.format("\n%s\n", separator);
@@ -20,32 +20,30 @@ public class Tabulate {
     }
 
     // Done :)
-    return output + separator;
+    return separator + output + separator;
   }
-  static String getSeparator(int[] longestColumnLengths) {
-    // Create the separator
-    String separator = "+ ";
-    for(int padIdx = 0; padIdx < longestColumnLengths.length; padIdx++) {
-      int numDashes = longestColumnLengths[padIdx] + 2;
-      for(int colIdx = 0; colIdx < numDashes; colIdx++) {
-        separator = separator.concat("-");
-      }
+  static String generateSeparator(int[] longestColumnLengths) {
+    String separator = "";
+    for(int colIdx = 0; colIdx < longestColumnLengths.length; colIdx++) {
+      int curWidth = longestColumnLengths[colIdx];
+      String format = (colIdx == 0 ? "+ " : " ") + "%-" + curWidth + "s +";
+      separator = separator.concat(
+        String.format(format, "-").replace(" ", "-")
+      );
     }
-
-    return separator + " +";
+    return separator;
   }
 
   static int[] getLongestColumnLengths(String[] headers, String[][] data) {
     int[] longestColumnLengths = new int[data[0].length];
     for(int rowIdx = 0; rowIdx < data.length; rowIdx++) {
       for(int colIdx = 0; colIdx < data[rowIdx].length; colIdx++) {
-        int length = Math.max(
-          data[rowIdx][colIdx].length(),
-          headers[colIdx].length()
-        );
-        if(length > longestColumnLengths[colIdx]) {
-          longestColumnLengths[colIdx] = length;
-        }
+        int dataLength = data[rowIdx][colIdx].length();
+        int headerLength = headers[colIdx].length();
+
+        int curLength = Math.max(dataLength, headerLength);
+        int curLongest = longestColumnLengths[colIdx];
+        longestColumnLengths[colIdx] = Math.max(curLength, curLongest);
       }
     }
 

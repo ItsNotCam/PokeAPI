@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import static cam.PokeAPI.util.Util.instantiateModelGenerically;
 
 @JsonRootName(value = "pokemon_ev")
-public class PokemonEVModel {
+public class PokemonEVModel implements Model {
   String ev_name;
   Integer ev_amount;
   Integer pokemon_number;
@@ -35,7 +35,7 @@ public class PokemonEVModel {
     this.ev_amount = evAmount;
   }
 
-  public Integer getPokemonNumber() {
+  public Integer getPokemon_number() {
     return pokemon_number;
   }
 
@@ -43,19 +43,19 @@ public class PokemonEVModel {
     this.pokemon_number = pokemon_number;
   }
 
-  public String getPokemonName() {
+  public String getPokemon_name() {
     return pokemon_name;
   }
 
-  public void setPokemonName(String pokemon_name) {
+  public void setPokemon_name(String pokemon_name) {
     this.pokemon_name = pokemon_name;
   }
 
-  public String getPokemonSubName() {
+  public String getPokemon_sub_name() {
     return pokemon_sub_name;
   }
 
-  public void setPokemonSubName(String pokemon_sub_name) {
+  public void setPokemon_sub_name(String pokemon_sub_name) {
     this.pokemon_sub_name = pokemon_sub_name;
   }
 }

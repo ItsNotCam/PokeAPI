@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import static cam.PokeAPI.util.Util.instantiateModelGenerically;
 
 @JsonRootName(value = "pokemon_element")
-public class PokemonElementModel {
+public class PokemonElementModel implements Model {
   String element_name;
   Integer pokemon_number;
   String pokemon_name;

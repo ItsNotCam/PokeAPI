@@ -9,7 +9,7 @@ import static cam.PokeAPI.util.Util.instantiateModelGenerically;
 
 
 @JsonRootName(value = "ability")
-public class AbilityModel {
+public class AbilityModel implements Model {
   String name;
   String description;
   Integer generation;

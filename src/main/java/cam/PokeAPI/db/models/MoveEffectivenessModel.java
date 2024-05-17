@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import static cam.PokeAPI.util.Util.instantiateModelGenerically;
 
 @JsonRootName(value = "move_effectiveness")
-public class MoveEffectivenessModel {
+public class MoveEffectivenessModel implements Model {
   String dmg_source;
   String dmg_dest;
   Integer effectiveness;

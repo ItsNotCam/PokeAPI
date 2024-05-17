@@ -8,6 +8,7 @@ import cam.PokeAPI.db.queries.PokemonQueries;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +16,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
-@EnableAutoConfiguration
+@SpringBootApplication
 public class PokeApiApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(PokeApiApplication.class, args);
+	}
+
+	/*
 	static Connection connection;
 
 	static {
@@ -146,9 +152,5 @@ public class PokeApiApplication {
 			rs.beforeFirst();
 		}
 		return rowCount;
-	}
-
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(PokeApiApplication.class, args);
-	}
+	}*/
 }

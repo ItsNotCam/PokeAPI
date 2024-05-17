@@ -61,4 +61,49 @@ public class PokemonQueries {
 		String sql = "SELECT * FROM move_effectiveness WHERE dmg_source = ?";
 		return sql;
 	}
+
+	public static String getPokemon(boolean includeElements) {
+		@Language("PSQL") String sql;
+		if(includeElements) {
+			sql = """
+				SELECT
+					p.*,
+					STRING_AGG(DISTINCT pe.element_name::text, ',') AS elements,
+					STRING_AGG(DISTINCT pm.move_name::text, ',') AS moves,
+					STRING_AGG(DISTINCT pa.ability_name::text, ',') AS abilities,
+					STRING_AGG(DISTINCT pev.ev_name::text, ',') AS evs
+				
+				FROM pokemon AS p
+				
+				INNER JOIN pokemon_element AS pe
+					ON pe.pokemon_number = p.number
+					AND pe.pokemon_name = p.name
+					AND pe.pokemon_sub_name = ''
+							
+				INNER JOIN pokemon_move AS pm
+					ON pm.pokemon_number = p.number
+					AND pm.pokemon_name = p.name
+					AND pm.pokemon_sub_name = ''
+				
+				INNER JOIN pokemon_ability AS pa
+					ON pa.pokemon_number = p.number
+					AND pa.pokemon_name = p.name
+					AND pa.pokemon_sub_name = ''
+				
+				LEFT JOIN pokemon_ev AS pev
+					ON pev.pokemon_number = p.number
+					AND pev.pokemon_name = p.name
+					AND pev.pokemon_sub_name = ''
+				
+				WHERE p.name = ?
+					AND p.sub_name = ''
+				
+				GROUP BY p.number, p.name, p.sub_name;
+			""";
+
+		} else {
+			sql = "SELECT * FROM pokemon WHERE name=?";
+		}
+		return sql;
+	}
 }

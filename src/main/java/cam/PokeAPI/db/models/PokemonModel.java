@@ -7,7 +7,7 @@ import static cam.PokeAPI.util.Util.instantiateModelGenerically;
 
 
 @JsonRootName(value = "pokemon")
-public class PokemonModel {
+public class PokemonModel implements Model {
     private Integer number;
     private String name, sub_name;
 

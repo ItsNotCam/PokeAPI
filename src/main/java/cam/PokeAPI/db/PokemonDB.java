@@ -51,7 +51,7 @@ public class PokemonDB {
           String[] moves = rs.getString("moves").split(",");
           String[] abilities = rs.getString("abilities").split(",");
           String[] evNames = rs.getString("evs").split(",");
-          String[] effectiveness_from = rs.getString("effectiveness_from").split(",");
+          String[] effectiveness_defending = rs.getString("effectiveness_from").split(",");
           String[] effectiveness_attacking = rs.getString("effectiveness_against").split(",");
 
           // Get reused columns
@@ -96,12 +96,12 @@ public class PokemonDB {
             rs.close();
           }
 
-          // Get effectiveness from
-          Map<String, Integer> effectDefendingMap = new HashMap<>();
-          for (String s : effectiveness_from) {
+          // Get effectiveness defending
+          Map<String, Float> effectDefendingMap = new HashMap<>();
+          for (String s : effectiveness_defending) {
             String[] curEffects = s.split("-");
             String elementName = curEffects[0];
-            int elementValue = Integer.parseInt(curEffects[1]);
+            float elementValue = Float.parseFloat(curEffects[1]);
 
             if (effectDefendingMap.containsKey(elementName)) {
               elementValue *= effectDefendingMap.get(elementName);
@@ -116,12 +116,12 @@ public class PokemonDB {
             effectsDefending[i] = new PokemonElementEffectivenessObject((String)key, effectDefendingMap.get(key));
           }
 
-          // Get effectiveness against
-          Map<String, Integer> effectAttackingMap = new HashMap<>();
+          // Get effectiveness attacking
+          Map<String, Float> effectAttackingMap = new HashMap<>();
           for (String s : effectiveness_attacking) {
             String[] curEffects = s.split("-");
             String elementName = curEffects[0];
-            int elementValue = Integer.parseInt(curEffects[1]);
+            float elementValue = Float.parseFloat(curEffects[1]);
 
             if (effectAttackingMap.containsKey(elementName)) {
               elementValue *= effectAttackingMap.get(elementName);
